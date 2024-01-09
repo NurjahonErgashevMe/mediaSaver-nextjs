@@ -1,18 +1,23 @@
 "use client";
-import { FC, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import s from "./Content.module.css";
 import { useAppSelector } from "@/hooks/redux";
 import Image from "next/image";
 
-const ContentSection: FC = () => {
+interface ContentSectionProps {
+  setCurrentIndex: Dispatch<SetStateAction<number>>;
+  currentIndex: number;
+}
+
+const ContentSection: FC<ContentSectionProps> = ({
+  currentIndex,
+  setCurrentIndex,
+}) => {
   const media = useAppSelector((state) => state.upload);
-  const [currentIndex, setCurrentIndex] = useState(
-    media?.length <= 0 ? 0 : media.length - 1
-  );
 
   useEffect(() => {
     setCurrentIndex(() => (media?.length <= 0 ? 0 : media.length - 1));
-  }, [media]);
+  }, [media, setCurrentIndex]);
 
   if (!media.length) {
     return <></>;

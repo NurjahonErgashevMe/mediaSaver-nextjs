@@ -8,14 +8,23 @@ export const sliceUpload = createSlice({
   initialState,
   reducers: {
     onSave: (state, action: PayloadAction<IUpload>) => {
-      state.push(action.payload);
+    return  state.push(action.payload);
     },
-    onDelete: (state, action: PayloadAction<IUpload["fileKey"]>) => {
-      state.filter((item) => item.fileKey !== action.payload);
+    onDelete: (state, action: PayloadAction<string>) => {
+      return state.filter((item) => item.fileKey != action.payload);
+    },
+    onChange: (state, action: PayloadAction<IUpload>) => {
+      const index = state.findIndex(
+        (item) => item.fileKey === action.payload.fileKey
+      );
+
+      if (index !== -1) {
+        state[index] = { ...state[index], ...action.payload };
+      }
     },
   },
 });
 
-export const { onDelete, onSave } = sliceUpload.actions;
+export const { onDelete, onSave, onChange } = sliceUpload.actions;
 
 export default sliceUpload.reducer;
